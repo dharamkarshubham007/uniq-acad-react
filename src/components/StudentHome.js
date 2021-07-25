@@ -1,10 +1,16 @@
 import React from 'react';
+import {Container} from "@material-ui/core";
+import AvailableCourses from "./student/AvailableCourses";
+import EnrolledCourses from "./student/EnrolledCourses";
 
 const StudentHome = () => {
     return (
-        <div>
-            StudentHOme
-        </div>
+        <Container>
+            <AvailableCourses/>
+            <br/>
+            <br/>
+            <EnrolledCourses/>
+        </Container>
     )
 };
 
