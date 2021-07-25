@@ -3,10 +3,33 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from "react-redux";
+import store from "./redux/store";
+import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
+
+const defaultOptions = {
+    watchQuery: {
+        fetchPolicy: 'no-cache',
+        errorPolicy: 'ignore',
+    },
+    query: {
+        fetchPolicy: 'no-cache',
+        errorPolicy: 'all',
+    },
+}
+const client = new ApolloClient({
+    uri: process.env.REACT_APP_BACKEND_URL,
+    cache: new InMemoryCache(),
+    defaultOptions
+})
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      <Provider store={store}>
+          <ApolloProvider client={client}>
+            <App />
+          </ApolloProvider>
+      </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
