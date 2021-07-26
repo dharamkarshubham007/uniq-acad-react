@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
 import store from "./redux/store";
 import {ApolloClient, ApolloLink, ApolloProvider, concat, createHttpLink, InMemoryCache} from "@apollo/client";
-import {setContext} from "@apollo/client/link/context";
+// import {setContext} from "@apollo/client/link/context";
 
 const defaultOptions = {
     watchQuery: {

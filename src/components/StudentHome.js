@@ -2,24 +2,23 @@ import React from 'react';
 import {Container} from "@material-ui/core";
 import AvailableCourses from "./student/AvailableCourses";
 import EnrolledCourses from "./student/EnrolledCourses";
-import {Route, Switch, useLocation, useRouteMatch} from "react-router";
-import Navbar from "./Navbar";
+import {Route, Switch, useRouteMatch} from "react-router";
 
 const StudentHome = () => {
     const {path} = useRouteMatch();
+    console.log(path);
     return (
         <>
             <Container>
                 <Switch>
-                    <Route path={`${path}student-dashboard/available-courses`}>
+                    <Route exact path={`${path}/available-courses`}>
                         <AvailableCourses/>
                     </Route>
-                    <Route path={`${path}student-dashboard`}>
+                    <Route path={`${path}`}>
                         <EnrolledCourses/>
                     </Route>
                 </Switch>
             </Container>
-
         </>
     )
 };

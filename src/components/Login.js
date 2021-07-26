@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,13 +12,11 @@ import Typography from "@material-ui/core/Typography";
 import {makeStyles} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import {Link, useHistory} from "react-router-dom";
-import {withRouter} from "react-router"
 import Copyright from "./Copyright";
 import {useMutation} from "@apollo/client";
 import {LOGIN} from "../graphql/mutations";
 import {toggleSpinner} from "../redux/actions/spinnerActions";
 import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
 import {setUserDetails} from "../redux/actions/userActions";
 import {INSTRUCTOR, STUDENT} from "../appConstants";
 
@@ -47,8 +45,15 @@ const Login = (props) => {
     const classes = useStyles();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [login, {data}] = useMutation(LOGIN);
+    const [login] = useMutation(LOGIN);
     const history = useHistory();
+
+    // useEffect(() => {
+    //     console.log("use effect");
+    //     console.log(props.user.token);
+    //
+    // }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         // eslint-disable-next-line eqeqeq
@@ -76,20 +81,29 @@ const Login = (props) => {
                 localStorage.setItem('token', token);
                 props.setUserDetails(user, token);
                 console.log(user.role);
+                props.toggleSpinner();
                 if (user.role == STUDENT) {
-                    props.history.push("/student-dashboard")
+                    console.log("in student con");
+                    history.push("/student-dashboard");
                 } else if (user.role == INSTRUCTOR) {
-                    history.push("/instructor-dashboard")
+                    history.push("/instructor-dashboard");
                 }
             }
-            props.toggleSpinner();
-
         } catch (e) {
             console.log(e);
             props.toggleSpinner();
         }
 
     }
+
+    if(props.user.token) {
+        if(props.user.user.role == INSTRUCTOR) {
+            history.push('/instructor-dashboard')
+        } else if (props.user.user.role == STUDENT) {
+            history.push('/student-dashboard')
+        }
+    }
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline/>
@@ -161,12 +175,18 @@ const Login = (props) => {
     );
 }
 
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggleSpinner: bindActionCreators(toggleSpinner, dispatch),
-        setUserDetails: (user, token) => dispatch(setUserDetails(user, token))
+        toggleSpinner: () => dispatch(toggleSpinner()),
+        setUserDetails: (user, token) => dispatch(setUserDetails({user, token}))
     }
 }
 
 
-export default connect(null, mapDispatchToProps)(withRouter(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

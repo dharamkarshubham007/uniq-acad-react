@@ -2,12 +2,12 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import spinnerReducer from './reducers/spinnerReducer';
 import userReducer from "./reducers/userReducer";
-// import modalReducer from './reducer/modalReducer';
+import instructorReducer from "./reducers/instructorReducer";
 
 const rootReducer = combineReducers({
     spinner: spinnerReducer,
     user: userReducer,
-    // modal: modalReducer
+    instructor: instructorReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -42,3 +42,17 @@ export const GET_ENROLLED_COURSES_OF_STUDENT = gql`
     }
 `
 
+export const GET_INSTRUCTOR_COURSES = gql`
+    query instructorCourses {
+      instructorCourses {
+        id
+        course {
+            prerequisites
+            duration
+            id
+            name
+            numberOfStudents
+        }
+      }
+    }
+`

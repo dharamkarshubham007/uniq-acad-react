@@ -53,7 +53,6 @@ export default function CourseTable(props) {
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                         {props.columns.map((column) => {
-                                            console.log(column);
                                             const value = row[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>

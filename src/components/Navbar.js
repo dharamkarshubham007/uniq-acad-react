@@ -8,16 +8,16 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core";
 import {
   AccountBoxSharp,
-  AddBox,
   AddCircle,
   Assignment,
   Ballot,
-  CreateNewFolder,
   ExitToApp,
   LockOpen
 } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {connect} from "react-redux";
+import {INSTRUCTOR, STUDENT} from "../appConstants";
+import {logout} from "../redux/actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,23 +36,31 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar(props) {
   const classes = useStyles();
+  const history = useHistory();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    props.logout();
+    history.push('/login')
+  }
+
   const getNavigationLinks = () => {
-    let navlinks = [];
+    let links = [];
     if( props.user.token ) {
-      if(props.user.user.role == "INSTRUCTOR") {
-        navlinks = [{
+      if(props.user.user.role == INSTRUCTOR) {
+        links = [{
           id: "my_courses",
           name: "My Courses",
           to: "/instructor-dashboard",
-          icon: ""
+          icon: <Assignment/>
         }, {
           id: "create_courses",
           name: "Create Courses",
-          to: "/",
+          to: "/instructor-dashboard/create-course",
           icon: <AddCircle/>
         }]
-      } else if( props.user.user.role == "STUDENT") {
-        navlinks = [{
+      } else if( props.user.user.role == STUDENT) {
+        links = [{
           id: "enrolled_courses",
           name: "Enrolled Courses",
           to: "/student-dashboard",
@@ -65,7 +73,7 @@ function Navbar(props) {
         }]
       }
     } else {
-      navlinks = [{
+      links = [{
         id: "login",
         name: "Login",
         to: "/login",
@@ -77,7 +85,7 @@ function Navbar(props) {
         icon: <AccountBoxSharp/>
       }]
     }
-    return navlinks;
+    return links;
   }
   return (
     <AppBar position="static" className={classes.appBar}>
@@ -105,7 +113,8 @@ function Navbar(props) {
         {props.user.token ? (
             <Button
                 color="inherit"
-                startIcon=<ExitToApp/>
+                startIcon={<ExitToApp/>}
+                onClick={handleLogout}
             >
               Logout
             </Button>
@@ -121,4 +130,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, null)(Navbar);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logout: () => dispatch(logout())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

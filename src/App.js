@@ -13,7 +13,7 @@ const history = createBrowserHistory();
 function App() {
   return (
     <div>
-      <Router history={history}>
+      <Router>
         <Navbar />
         <Switch>
           <Route exact path="/register">
@@ -25,8 +25,8 @@ function App() {
           <Route exact path="/">
             <Login />
           </Route>
-          <ProtectedRoute component={StudentHome} to="/student-dashboard"/>
-          <ProtectedRoute component={InstructorHome} to="/instructor-dashboard"/>
+          <ProtectedRoute component={StudentHome} path="/student-dashboard"/>
+          <ProtectedRoute component={InstructorHome} path="/instructor-dashboard"/>
         </Switch>
         <Spinner/>
       </Router>

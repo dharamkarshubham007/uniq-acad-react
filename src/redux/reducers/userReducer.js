@@ -1,4 +1,4 @@
-import {SET_USER} from '../actionTypes';
+import {SET_USER, USER_LOGGED_OUT} from '../actionTypes';
 
 const initialState = {
     user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : undefined,
@@ -11,6 +11,11 @@ const userReducer = (state = initialState, action) => {
             return {
                 user: action.payload.user,
                 token: action.payload.token
+            }
+        case USER_LOGGED_OUT:
+            return {
+                user: undefined,
+                token: undefined
             }
         default:
             return state;
