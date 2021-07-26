@@ -7,31 +7,18 @@ import Typography from "@material-ui/core/Typography";
 const columns = [
     {id: 'course_name', label: 'Course Name'},
     {id: 'instructor_name', label: 'Instructor'},
-    {
-        id: 'prerequisites',
-        label: 'Prerequisites',
-    },
-    {
-        id: 'duration',
-        label: 'Duration',
-    },
-    {
-        id: 'number_of_students',
-        label: 'Number Of Students',
-    },
-    {
-        id: 'actions',
-        label: 'Actions',
-    },
+    {id: 'prerequisites', label: 'Prerequisites'},
+    {id: 'duration', label: 'Duration'},
+    {id: 'number_of_students', label: 'Number Of Students'},
+    {id: 'actions', label: 'Actions'},
 ];
+
 const AvailableCourses = () => {
     const {loading, error, data} = useQuery(GET_AVAILABLE_COURSES_FOR_STUDENT);
     let filteredAvailableCourses = [];
     if(loading) {}
     if(error) {}
     if(data) {
-        console.log("availbale courses")
-        console.log(data);
         filteredAvailableCourses = data.availableCoursesForStudent.map((course) => {
             return {
                 student_course_id: course.id,

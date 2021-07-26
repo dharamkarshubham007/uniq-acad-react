@@ -7,25 +7,22 @@ import Typography from "@material-ui/core/Typography";
 const columns = [
     {id: 'course_name', label: 'Course Name'},
     {id: 'instructor_name', label: 'Instructor'},
-    {
-        id: 'prerequisites',
-        label: 'Prerequisites',
-    },
-    {
-        id: 'duration',
-        label: 'Duration',
-    },
-    {
-        id: 'status',
-        label: 'Status',
-    }
+    {id: 'prerequisites', label: 'Prerequisites'},
+    {id: 'duration', label: 'Duration'},
+    {id: 'status', label: 'Status'}
 ];
+
 const EnrolledCourses = () => {
     const {loading, error, data} = useQuery(GET_ENROLLED_COURSES_OF_STUDENT);
     let filteredEnrolledCourses = [];
-    if(loading) {}
-    if(error) {}
-    if(data) {
+
+    if (loading) {
+    }
+
+    if (error) {
+    }
+
+    if (data) {
         filteredEnrolledCourses = data.studentEnrolledCourses.map((course) => {
             return {
                 student_course_id: course.id,
@@ -40,6 +37,7 @@ const EnrolledCourses = () => {
             }
         });
     }
+
     return (
         <>
             <Typography variant="h6" color="secondary">

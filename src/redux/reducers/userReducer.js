@@ -1,7 +1,7 @@
 import {SET_USER} from '../actionTypes';
 
 const initialState = {
-    user: localStorage.getItem('user') ? localStorage.getItem('user') : undefined,
+    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : undefined,
     token: localStorage.getItem('token') ? localStorage.getItem('token') : undefined
 }
 
