@@ -3,23 +3,25 @@ import {Container, TextField} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import {useMutation} from "@apollo/client";
-import {LOGIN} from "../../graphql/mutations";
+import {CREATE_COURSE} from "../../graphql/mutations";
+import {toggleSpinner} from "../../redux/actions/spinnerActions";
+import {connect} from "react-redux";
 
 const CreateCourse = (props) => {
     const [name ,setName] = useState("");
     const [prerequisites, setPrerequisites] = useState("");
     const [duration, setDuration] = useState(0);
-    const [createCourse] = useMutation(LOGIN);
+    const [createCourse] = useMutation(CREATE_COURSE);
 
-    const handleSubmit = async() => {
-
+    const handleSubmit = async(e) => {
+        e.preventDefault();
         if(name == '' || prerequisites == '' || duration == '') {
             return false;
         }
 
         try {
             props.toggleSpinner();
-            const response = await createCourse({
+            await createCourse({
                 variables: {
                     name: name,
                     prerequisites: prerequisites,
@@ -27,7 +29,11 @@ const CreateCourse = (props) => {
                 }
             })
 
-            const {data} = response;
+            // const {data} = response;
+            setDuration(0);
+            setPrerequisites('');
+            setName('');
+            props.toggleSpinner();
         } catch (e) {
             props.toggleSpinner();
         }
@@ -91,4 +97,10 @@ const CreateCourse = (props) => {
     )
 }
 
-export default CreateCourse;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        toggleSpinner: () => dispatch(toggleSpinner)
+    }
+}
+
+export default connect(null, mapDispatchToProps) (CreateCourse)

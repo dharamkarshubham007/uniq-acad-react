@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
 import store from "./redux/store";
-import {ApolloClient, ApolloLink, ApolloProvider, concat, createHttpLink, InMemoryCache} from "@apollo/client";
+import {ApolloClient, ApolloLink, ApolloProvider, concat, createHttpLink, gql, InMemoryCache} from "@apollo/client";
 // import {setContext} from "@apollo/client/link/context";
 
 const defaultOptions = {
@@ -50,7 +50,13 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 const client = new ApolloClient({
     link: concat(authMiddleware, httpLink),
     cache: new InMemoryCache(),
-    defaultOptions
+    defaultOptions,
+    typeDefs: gql`
+      enum CreateUserRole {
+        INSTRUCTOR
+        STUDENT
+      }
+    `
 })
 
 ReactDOM.render(

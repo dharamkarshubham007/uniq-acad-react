@@ -6,7 +6,6 @@ import {Route, Switch, useRouteMatch} from "react-router";
 
 const StudentHome = () => {
     const {path} = useRouteMatch();
-    console.log(path);
     return (
         <>
             <Container>

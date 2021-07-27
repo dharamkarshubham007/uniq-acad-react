@@ -11,7 +11,6 @@ export const LOGIN = gql`
           firstName
           lastName
           email
-          password
           userRole {
             id
             role {
@@ -42,5 +41,27 @@ export const CREATE_COURSE = gql`
             name
         }
       }
-}
-  `;
+  }
+`;
+
+export const SIGN_UP = gql`
+  mutation SIGNUP($firstName: String!, $lastName: String!, $email: String!, $password: String!, $role: CreateUserRole!){
+    signUp(
+      data: {
+        firstName: $firstName
+        lastName: $lastName
+        email: $email
+        password: $password
+        role: $role
+      }
+    ) {
+        user {
+            id
+            firstName
+            lastName
+            email
+        }
+        token
+    }
+  }
+`;

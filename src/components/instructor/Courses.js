@@ -1,6 +1,6 @@
 import React from 'react';
 import {useQuery} from "@apollo/client";
-import {GET_ENROLLED_COURSES_OF_STUDENT, GET_INSTRUCTOR_COURSES} from "../../graphql/query";
+import {GET_INSTRUCTOR_COURSES} from "../../graphql/query";
 import {toggleSpinner} from "../../redux/actions/spinnerActions";
 import {connect} from "react-redux";
 import Typography from "@material-ui/core/Typography";
