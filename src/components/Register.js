@@ -77,7 +77,6 @@ function Register(props) {
 
             if (data) {
                 let {user, token} = data.signUp;
-                // delete user.userRole;
                 user = {...user, role};
                 localStorage.setItem('user', JSON.stringify(user));
                 localStorage.setItem('token', token);
@@ -92,6 +91,14 @@ function Register(props) {
         } catch (e) {
             console.log(e);
             props.toggleSpinner();
+        }
+    }
+
+    if(props.user.token) {
+        if(props.user.user.role == INSTRUCTOR) {
+            history.push('/instructor-dashboard')
+        } else if (props.user.user.role == STUDENT) {
+            history.push('/student-dashboard')
         }
     }
 
