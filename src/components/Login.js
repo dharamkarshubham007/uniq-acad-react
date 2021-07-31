@@ -11,15 +11,14 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import {Link, useHistory} from "react-router-dom";
+import {Link, useHistory, withRouter} from "react-router-dom";
 import Copyright from "./Copyright";
 import {useMutation} from "@apollo/client";
 import {LOGIN} from "../graphql/mutations";
 import {toggleSpinner} from "../redux/actions/spinnerActions";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setUserDetails} from "../redux/actions/userActions";
 import {INSTRUCTOR, STUDENT} from "../appConstants";
-
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -41,28 +40,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Login = (props) => {
+const Login = () => {
     const classes = useStyles();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [login] = useMutation(LOGIN);
     const history = useHistory();
-
-    // useEffect(() => {
-    //     console.log("use effect");
-    //     console.log(props.user.token);
-    //
-    // }, []);
+    const dispatch = useDispatch()
+    const user = useSelector(state => state.user);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // eslint-disable-next-line eqeqeq
+
         if (email == '' || password == '') {
             return false;
         }
 
         try {
-            props.toggleSpinner();
+            dispatch(toggleSpinner());
             const response = await login({
                 variables: {
                     email: email,
@@ -79,27 +74,24 @@ const Login = (props) => {
                 user = {...user, role: role.role};
                 localStorage.setItem('user', JSON.stringify(user));
                 localStorage.setItem('token', token);
-                props.setUserDetails(user, token);
-                console.log(user.role);
-                props.toggleSpinner();
+                dispatch(setUserDetails({user, token}));
+                dispatch(toggleSpinner());
                 if (user.role == STUDENT) {
-                    console.log("in student con");
                     history.push("/student-dashboard");
                 } else if (user.role == INSTRUCTOR) {
                     history.push("/instructor-dashboard");
                 }
             }
         } catch (e) {
-            console.log(e);
-            props.toggleSpinner();
+            dispatch(toggleSpinner());
         }
 
     }
 
-    if(props.user.token) {
-        if(props.user.user.role == INSTRUCTOR) {
+    if(user.token) {
+        if(user.user.role == INSTRUCTOR) {
             history.push('/instructor-dashboard')
-        } else if (props.user.user.role == STUDENT) {
+        } else if (user.user.role == STUDENT) {
             history.push('/student-dashboard')
         }
     }
@@ -175,18 +167,20 @@ const Login = (props) => {
     );
 }
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.user
-    }
-}
+// const mapStateToProps = (state) => {
+//     return {
+//         user: state.user
+//     }
+// }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleSpinner: () => dispatch(toggleSpinner()),
-        setUserDetails: (user, token) => dispatch(setUserDetails({user, token}))
-    }
-}
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         toggleSpinner: () => dispatch(toggleSpinner()),
+//         setUserDetails: (user, token) => dispatch(setUserDetails({user, token}))
+//     }
+// }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+// export default connect(mapStateToProps, mapDispatchToProps)(Login);
+// export default connect(mapStateToProps, null)(Login);
+export default Login;

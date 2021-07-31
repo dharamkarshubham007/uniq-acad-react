@@ -9,8 +9,6 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     }
 
     const checkAuthorization = () => {
-        console.log(rest.path);
-        console.log(rest.user.user.role);
         if((rest.path == '/student-dashboard' && rest.user.user.role != STUDENT)) {
             return  false;
         } else if(rest.path == '/instructor-dashboard' && rest.user.user.role != INSTRUCTOR) {

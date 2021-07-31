@@ -20,7 +20,7 @@ import {SIGN_UP} from "../graphql/mutations";
 import {INSTRUCTOR, STUDENT} from "../appConstants";
 import {toggleSpinner} from "../redux/actions/spinnerActions";
 import {setUserDetails} from "../redux/actions/userActions";
-import {connect} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -51,7 +51,10 @@ function Register(props) {
     const [role, setRole] = useState("STUDENT");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [signUp] = useMutation(SIGN_UP)
+    const [signUp] = useMutation(SIGN_UP);
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.user);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(email == '' || password == '' || confirmPassword == '' || firstName == '' || lastName == '' || role == '') {
@@ -63,7 +66,7 @@ function Register(props) {
         }
 
         try {
-            props.toggleSpinner();
+            dispatch(toggleSpinner());
             const response = await signUp({
                 variables: {
                     firstName: firstName,
@@ -80,8 +83,8 @@ function Register(props) {
                 user = {...user, role};
                 localStorage.setItem('user', JSON.stringify(user));
                 localStorage.setItem('token', token);
-                props.setUserDetails(user, token);
-                props.toggleSpinner();
+                dispatch(setUserDetails({user, token}));
+                dispatch(toggleSpinner());
                 if (user.role == STUDENT) {
                     history.push("/student-dashboard");
                 } else if (user.role == INSTRUCTOR) {
@@ -89,15 +92,14 @@ function Register(props) {
                 }
             }
         } catch (e) {
-            console.log(e);
-            props.toggleSpinner();
+            dispatch(toggleSpinner());
         }
     }
 
-    if(props.user.token) {
-        if(props.user.user.role == INSTRUCTOR) {
+    if(user.token) {
+        if(user.user.role == INSTRUCTOR) {
             history.push('/instructor-dashboard')
-        } else if (props.user.user.role == STUDENT) {
+        } else if (user.user.role == STUDENT) {
             history.push('/student-dashboard')
         }
     }
@@ -223,11 +225,4 @@ function Register(props) {
     );
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleSpinner: () => dispatch(toggleSpinner()),
-        setUserDetails: (user, token) => dispatch(setUserDetails({user, token}))
-    }
-}
-
-export default connect(null, mapDispatchToProps)(Register);
+export default Register;
