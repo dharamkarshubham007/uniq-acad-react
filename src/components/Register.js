@@ -20,7 +20,7 @@ import {SIGN_UP} from "../graphql/mutations";
 import {INSTRUCTOR, STUDENT} from "../appConstants";
 import {toggleSpinner} from "../redux/actions/spinnerActions";
 import {setUserDetails} from "../redux/actions/userActions";
-import {connect, useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     paper: {

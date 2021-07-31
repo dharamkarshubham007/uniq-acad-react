@@ -5,13 +5,14 @@ import Button from "@material-ui/core/Button";
 import {useMutation} from "@apollo/client";
 import {CREATE_COURSE} from "../../graphql/mutations";
 import {toggleSpinner} from "../../redux/actions/spinnerActions";
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 
-const CreateCourse = (props) => {
+const CreateCourse = () => {
     const [name ,setName] = useState("");
     const [prerequisites, setPrerequisites] = useState("");
     const [duration, setDuration] = useState(0);
     const [createCourse] = useMutation(CREATE_COURSE);
+    const dispatch = useDispatch();
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -20,7 +21,7 @@ const CreateCourse = (props) => {
         }
 
         try {
-            props.toggleSpinner();
+            dispatch(toggleSpinner());
             await createCourse({
                 variables: {
                     name: name,
@@ -33,9 +34,9 @@ const CreateCourse = (props) => {
             setDuration(0);
             setPrerequisites('');
             setName('');
-            props.toggleSpinner();
+            dispatch(toggleSpinner());
         } catch (e) {
-            props.toggleSpinner();
+            dispatch(toggleSpinner());
         }
 
     }
@@ -97,10 +98,4 @@ const CreateCourse = (props) => {
     )
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleSpinner: () => dispatch(toggleSpinner)
-    }
-}
-
-export default connect(null, mapDispatchToProps) (CreateCourse)
+export default CreateCourse

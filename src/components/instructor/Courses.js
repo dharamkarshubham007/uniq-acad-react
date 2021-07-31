@@ -2,7 +2,7 @@ import React from 'react';
 import {useQuery} from "@apollo/client";
 import {GET_INSTRUCTOR_COURSES} from "../../graphql/query";
 import {toggleSpinner} from "../../redux/actions/spinnerActions";
-import {connect} from "react-redux";
+import {useDispatch} from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import CourseTable from "../CourseTable";
 
@@ -12,21 +12,22 @@ const columns = [
     {id: 'duration', label: 'Duration'},
     {id: 'number_of_students', label: "Number of Students"}
 ];
-const Courses = (props) => {
 
+const Courses = () => {
+    const dispatch = useDispatch();
     const {loading, error, data} = useQuery(GET_INSTRUCTOR_COURSES);
     let filteredInstructorCourses = [];
 
     if (loading) {
-        props.toggleSpinner();
+        dispatch(toggleSpinner());
     }
 
     if (error) {
-        props.toggleSpinner();
+        dispatch(toggleSpinner());
     }
 
     if (data) {
-        props.toggleSpinner();
+        dispatch(toggleSpinner());
         filteredInstructorCourses = data.instructorCourses.map((instructorCourse) => {
             return {
                 instructor_course_id: instructorCourse.id,
@@ -37,6 +38,7 @@ const Courses = (props) => {
             }
         });
     }
+
     return (
         <>
             <Typography variant="h6" color="secondary">
@@ -47,10 +49,4 @@ const Courses = (props) => {
     )
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleSpinner: () => dispatch(toggleSpinner)
-    }
-}
-
-export default connect(null, mapDispatchToProps)(Courses);
+export default Courses;

@@ -65,3 +65,26 @@ export const SIGN_UP = gql`
     }
   }
 `;
+
+export const ENROLL_FOR_COURSE = gql`
+    mutation ENROLL($courseId: Int!){
+      enroll(courseId: $courseId) {
+        id
+        status
+        course {
+          id
+          name
+          prerequisites
+          duration
+          instructor {
+            id
+            user {
+              email
+              firstName
+              lastName
+            }
+          }
+        }
+      }
+    }
+`
