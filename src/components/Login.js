@@ -18,7 +18,8 @@ import {LOGIN} from "../graphql/mutations";
 import {toggleSpinner} from "../redux/actions/spinnerActions";
 import {useDispatch, useSelector} from "react-redux";
 import {setUserDetails} from "../redux/actions/userActions";
-import {INSTRUCTOR, STUDENT} from "../appConstants";
+import {ERROR_TYPE, INSTRUCTOR, STUDENT, SUCCESS_TYPE} from "../appConstants";
+import {showToaster} from "../redux/actions/ToasterActions";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -76,6 +77,7 @@ const Login = () => {
                 localStorage.setItem('token', token);
                 dispatch(setUserDetails({user, token}));
                 dispatch(toggleSpinner());
+                dispatch(showToaster("Welcome back!!", SUCCESS_TYPE));
                 if (user.role == STUDENT) {
                     history.push("/student-dashboard");
                 } else if (user.role == INSTRUCTOR) {
@@ -83,6 +85,7 @@ const Login = () => {
                 }
             }
         } catch (e) {
+            dispatch(showToaster(e.message, ERROR_TYPE));
             dispatch(toggleSpinner());
         }
 

@@ -5,7 +5,9 @@ import Button from "@material-ui/core/Button";
 import {useMutation} from "@apollo/client";
 import {CREATE_COURSE} from "../../graphql/mutations";
 import {toggleSpinner} from "../../redux/actions/spinnerActions";
-import {connect, useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
+import {showToaster} from "../../redux/actions/ToasterActions";
+import {ERROR_TYPE, SUCCESS_TYPE} from "../../appConstants";
 
 const CreateCourse = () => {
     const [name ,setName] = useState("");
@@ -30,13 +32,14 @@ const CreateCourse = () => {
                 }
             })
 
-            // const {data} = response;
             setDuration(0);
             setPrerequisites('');
             setName('');
             dispatch(toggleSpinner());
+            dispatch(showToaster("Course has been created successfully", SUCCESS_TYPE));
         } catch (e) {
             dispatch(toggleSpinner());
+            dispatch(showToaster(e.message, ERROR_TYPE));
         }
 
     }
@@ -98,4 +101,4 @@ const CreateCourse = () => {
     )
 }
 
-export default CreateCourse
+export default CreateCourse;

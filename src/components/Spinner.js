@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
-import {connect} from "react-redux";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -12,22 +12,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Spinner = (props) => {
+const Spinner = () => {
     const classes = useStyles();
-
+    const {show} = useSelector(state => state.spinner);
     const loader = (
         <div>
-            <Backdrop className={classes.backdrop} open={props.show}>
+            <Backdrop className={classes.backdrop} open={show}>
                 <CircularProgress color="secondary" />
             </Backdrop>
         </div>
     );
     return ReactDOM.createPortal(loader, document.getElementById('spinner'))
 }
-const mapStateToProps = (state) => {
-    return {
-        show: state.spinner.show
-    }
-}
 
-export default connect(mapStateToProps, null)(Spinner)
+export default Spinner;

@@ -5,6 +5,8 @@ import {toggleSpinner} from "../../redux/actions/spinnerActions";
 import {useDispatch} from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import CourseTable from "../CourseTable";
+import {showToaster} from "../../redux/actions/ToasterActions";
+import {ERROR_TYPE} from "../../appConstants";
 
 const columns = [
     {id: 'course_name', label: 'Course Name'},
@@ -23,6 +25,7 @@ const Courses = () => {
     }
 
     if (error) {
+        dispatch(showToaster(error.message, ERROR_TYPE))
         dispatch(toggleSpinner());
     }
 

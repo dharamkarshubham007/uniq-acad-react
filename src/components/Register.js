@@ -17,10 +17,11 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {useMutation} from "@apollo/client";
 import {SIGN_UP} from "../graphql/mutations";
-import {INSTRUCTOR, STUDENT} from "../appConstants";
+import {ERROR_TYPE, INSTRUCTOR, STUDENT, SUCCESS_TYPE} from "../appConstants";
 import {toggleSpinner} from "../redux/actions/spinnerActions";
 import {setUserDetails} from "../redux/actions/userActions";
 import {useDispatch, useSelector} from "react-redux";
+import {showToaster} from "../redux/actions/ToasterActions";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -85,6 +86,7 @@ function Register(props) {
                 localStorage.setItem('token', token);
                 dispatch(setUserDetails({user, token}));
                 dispatch(toggleSpinner());
+                dispatch(showToaster("Welcome!!", SUCCESS_TYPE));
                 if (user.role == STUDENT) {
                     history.push("/student-dashboard");
                 } else if (user.role == INSTRUCTOR) {
@@ -92,6 +94,7 @@ function Register(props) {
                 }
             }
         } catch (e) {
+            dispatch(showToaster(e.message, ERROR_TYPE));
             dispatch(toggleSpinner());
         }
     }

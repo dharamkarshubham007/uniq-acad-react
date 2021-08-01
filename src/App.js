@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import StudentHome from "./components/StudentHome";
 import InstructorHome from "./components/InstructorHome";
 import Spinner from "./components/Spinner";
+import Toaster from "./components/Toaster";
 
 const history = createBrowserHistory();
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <ProtectedRoute component={InstructorHome} path="/instructor-dashboard"/>
         </Switch>
         <Spinner/>
+        <Toaster/>
       </Router>
     </div>
   );
